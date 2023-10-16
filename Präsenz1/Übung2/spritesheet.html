@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spritesheet-Animation und Pixel</title>
+    <script type="text/javascript">
+        window.addEventListener('load', canvasApp, false);
+
+        function canvasApp() {
+            if (!document.createElement('canvas').getContext) {
+                return;
+            }
+
+            var theCanvas = document.getElementById('canvas');
+            var context = theCanvas.getContext('2d');
+
+            // Rendern von einem Pixelbild
+            var spriteSheet = new Image();
+            spriteSheet.addEventListener('load', onLoad);
+            //   spriteSheet.addEventListener('load', onLoad);
+            spriteSheet.src = 'monster.png';
+
+            //10 Sprites pro Zeile
+            var columns = 10;
+            //1 Zeile
+            var rows = 1;
+
+            var numFrames = columns * rows;
+
+            var rasterSize = 0;
+
+            var spriteWidth;
+            var spriteHeight;
+
+            var frameID = 0;
+
+
+            //Event Listener für Änderungen der Rastergröße
+            document.getElementById("sizeInput").addEventListener("change", onSizeChange);
+
+            function onLoad() {
+              spriteWidth = spriteSheet.width / numFrames;
+              spriteHeight = spriteSheet.height;
+              renderingLoop();
+              //...
+            }
+
+
+            function drawCanvas() {
+
+                context.clearRect(0, 0, theCanvas.width, theCanvas.height);
+
+                //x-Position: Spalte * Sprite-Breite
+                var sourceX = (frameID % columns) * spriteWidth;
+
+                //y-Position: Zeile * Sprite-Höhe
+                var sourceY = Math.floor((frameID / columns)) * spriteWidth;
+
+                context.drawImage(spriteSheet, sourceX, sourceY, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
+
+                var imgData = context.getImageData(sourceX, sourceY, spriteWidth, spriteHeight);
+
+                for (var x = 0; x < imgData.width; x++) {
+                    for (var y = 0; y < imgData.height; y++) {
+
+
+                        var rasterX = ((x / rasterSize) | 0) * rasterSize;
+                        var rasterY = ((y / rasterSize) | 0) * rasterSize;
+
+                        var rasterValIndex = (rasterX + rasterY * spriteWidth) * 4;
+
+                        r = imgData.data[rasterValIndex];
+                        g = imgData.data[rasterValIndex + 1];
+                        b = imgData.data[rasterValIndex + 2];
+                        a = imgData.data[rasterValIndex + 3];
+
+                        //Pixel setzen in x, y
+                        context.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+                        context.fillRect(x - rasterSize, y - rasterSize, rasterSize, rasterSize);
+
+                    }
+                }
+                frameID++;
+                if (frameID == numFrames) {
+                    frameID = 0;
+                }
+            }
+
+
+            // function onImageLoaded(e) {
+            //     renderingLoop();
+            // }
+
+            function renderingLoop() {
+                window.setTimeout(renderingLoop, 100);
+                drawCanvas();
+            }
+
+
+            function onSizeChange(e) {
+                rasterSize = e.target.value;
+                drawCanvas();
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div style="position: absolute; top: 50px; left: 50px">
+    <canvas id="canvas" width="190" height="240">
+        Your browser does not support the HTML 5 Canvas.
+    </canvas>
+    <form style="margin: 10px 100px 0 0">
+        <label for="sizeInput">Rastergröße ändern: </label><input type="range" id="sizeInput" min="0" max="50" step="1"
+                                                                  value="0"/>
+    </form>
+</div>
+</body>
+</html>
