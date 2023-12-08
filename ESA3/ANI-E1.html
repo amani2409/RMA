@@ -104,15 +104,15 @@
                 //Ausrichtung des Characters über Skalierungstransformation
                 //...
                 context.scale(direction,1);
-                context.drawImage(creatureImg, character.vx, character.vy);
+                context.drawImage(creatureImg, character.vx, character.vy, creatureWidth, creatureHeight);
                 context.restore();
             }
 
             function drawGround() {
                 //Boden mit ground.png zeichnen
                 //...
-                context.drawImage(groundImg, 0,groundY);
-                // context.drawImage(groundImg, 0, groundY, theCanvas.width, 100);
+                // context.drawImage(groundImg, 0,groundY);
+                context.drawImage(groundImg, 0, groundY, theCanvas.width, 100);
 
             }
 
