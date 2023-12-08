@@ -19,7 +19,7 @@
             image.addEventListener('load', onImageLoaded);
             image.src = 'colored.jpg';
 
-            var rasterSize = 0;
+            var rasterSize = 1;
 
             var imgWidth;
             var imgHeight;
@@ -54,12 +54,21 @@
                         b = imgData.data[rasterValIndex + 2];
                         a = imgData.data[rasterValIndex + 3];
 
+                        // Das r,g,b,a des aktuellen Pixel neu setzen
+                        var currentPixelIndex = (x + y * imgData.width) * 4;
+
+                        imgData.data[currentPixelIndex] = r;
+                        imgData.data[currentPixelIndex + 1] = g;
+                        imgData.data[currentPixelIndex + 2] = b;
+                        imgData.data[currentPixelIndex + 3] = a;
+
                         //Pixel setzen in x, y
-                        context.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a + ")";
-                        context.fillRect(x - rasterSize, y - rasterSize, rasterSize, rasterSize);
+                        //context.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+                        //context.fillRect(x - rasterSize, y - rasterSize, rasterSize, rasterSize);
 
                     }
                 }
+                context.putImageData(imgData, 0, 0);
             }
 
             function onSizeChange(e) {
