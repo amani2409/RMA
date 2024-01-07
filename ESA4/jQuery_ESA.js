@@ -145,26 +145,62 @@ jQuery(document).ready(function ($) {
     //bind in capture phase
     function createNewItem(event) {
         //Aufgabenteil a)
+        var $newItem = $('<li><input type="checkbox"/><label><input type="text" readonly/></label><div class="arrow-btn"></div><ul class="item-menu-bar"><li class="edit-btn">Editieren</li><li class="duplicate-btn">Duplizieren</li><li class="remove-btn">Löschen</li></ul></li>');
 
         //neues Element einfügen
+        $('ul.todo-list').append($newItem);
 
         //Checkbox stylen und Attribute setzen
+        styleCheckbox($newItem.find('input[type="checkbox"]'), uniqueItemID);
 
         //Editiermodus für neues Item aktivieren
+        setEditModeItem($newItem);
 
         //Event Handler hinzufügen
+        $newItem.find('.arrow-btn').on('click', function (){
+            onArrowClick($newItem);
+        });
+
+
+        $newItem.find('.edit-btn').on('click', function (){
+            setEditModeItem($newItem);
+        });
+
+
+        // Probleme !
+        $newItem.find('.duplicate-btn').on('click', function (){
+            var $duplicatedItem = duplicateItem($(this).closest('ul.todo-list > li'));
+            if(editItem) {
+                unEditModeItem();
+            }
+            fadeInItem($duplicatedItem);
+        });
+
+        $newItem.find('.remove-btn').on('click', function (){
+            removeItem($newItem);
+        });
+
+        // Event Hanler um mit Enter zu bestätigen
+        $newItem.find('input[type="text"]').pressEnter(function (event){
+            unEditModeItem();
+        });
 
         //neues Item einblenden
+        fadeInItem($newItem);
     }
 
     function onNewListClick() {
         //Aufgabenteil b)
 
         //alle list items löschen
+        $('ul.todo-list li').remove();
 
         //Variablen-Werte zurücksetzen
+        var editItem = null;
+        var uniqueItemID = 0 //Checkbox ID initial setzen
 
         //neues, leeres List Item erstellen
+        createNewItem();
     }
 
     function fadeInItem($item) {
