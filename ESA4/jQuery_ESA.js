@@ -151,7 +151,8 @@ jQuery(document).ready(function ($) {
         $('ul.todo-list').append($newItem);
 
         //Checkbox stylen und Attribute setzen
-        styleCheckbox($newItem.find('input[type="checkbox"]'), uniqueItemID);
+        setCheckboxAttributes($newItem.find('input[type="checkbox"]'), uniqueItemID++);
+        styleCheckbox($newItem.find('input[type="checkbox"]'), uniqueItemID++);
 
         //Editiermodus für neues Item aktivieren
         setEditModeItem($newItem);
