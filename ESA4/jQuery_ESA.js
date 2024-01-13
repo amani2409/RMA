@@ -159,16 +159,14 @@ jQuery(document).ready(function ($) {
 
         //Event Handler hinzufügen
         $newItem.find('.arrow-btn').on('click', function (){
-            onArrowClick($newItem);
+            onArrowClick(this.parentNode);
         });
 
 
         $newItem.find('.edit-btn').on('click', function (){
-            setEditModeItem($newItem);
+            setEditModeItem($(this).closest('ul.todo-list > li'));
         });
 
-
-        // Probleme !
         $newItem.find('.duplicate-btn').on('click', function (){
             var $duplicatedItem = duplicateItem($(this).closest('ul.todo-list > li'));
             if(editItem) {
@@ -178,7 +176,7 @@ jQuery(document).ready(function ($) {
         });
 
         $newItem.find('.remove-btn').on('click', function (){
-            removeItem($newItem);
+            removeItem($(this).closest('ul.todo-list > li'));
         });
 
         // Event Hanler um mit Enter zu bestätigen
